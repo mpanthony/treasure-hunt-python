@@ -136,10 +136,10 @@ def processCommand(command):
 
     if (command == ""):
         print "What??"
-        return False
+        return True
 
     if (command == "q"):
-        return True
+        return False
 
     newLocation = None
 
