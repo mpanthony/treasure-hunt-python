@@ -44,32 +44,33 @@ class Point:
 
         return True
 
-treasures = ['gem', 'ruby', 'diamond', 'coin', 'emerald', 'goblet']
 GRID_SIZE = 5
-treasure_locations = []
-monster_location = Point(0,0)
-player_location = Point(0,0)
+
+treasures = ['gem', 'ruby', 'diamond', 'coin', 'emerald', 'goblet']
+treasureLocations = []
+monsterLocation = Point(0, 0)
+playerLocation = Point(0, 0)
 foundTreasureCount = 0
 
 # Initialize a new game
 def initGame():
-    global player_location
-    global treasure_locations
-    global monster_location
+    global playerLocation
+    global treasureLocations
+    global monsterLocation
     global foundTreasureCount
 
     foundTreasureCount = 0
 
     # Position the player in the top left corner of the grid (1,1)
-    player_location = Point(1,1)
-    occupied_locations = [player_location]
+    playerLocation = Point(1, 1)
+    occupied_locations = [playerLocation]
 
     # Choose a random location for the monster, excluding the player's location
-    monster_location = chooseUnoccupiedLocation(occupied_locations)
+    monsterLocation = chooseUnoccupiedLocation(occupied_locations)
 
     # Randomly locate each of the treasures in unoccupied spaces
     for i in range(0, len(treasures)):
-        treasure_locations.append(chooseUnoccupiedLocation(occupied_locations))
+        treasureLocations.append(chooseUnoccupiedLocation(occupied_locations))
 
 # Find a point within a list and return its position, or -1 if not found
 def findPoint(list, pt):
@@ -92,21 +93,21 @@ def chooseUnoccupiedLocation(usedLocations):
 
 # Handle the player entering a new location in the game
 def enterLocation(location):
-    global player_location
-    global monster_location
+    global playerLocation
+    global monsterLocation
     global foundTreasureCount
 
-    player_location = location
+    playerLocation = location
 
-    print "You are now in location " + player_location.toString()
+    print "You are now in location " + playerLocation.toString()
 
     # If the monster is here, the game is over
-    if (monster_location.isEqualTo(player_location)):
+    if (monsterLocation.isEqualTo(playerLocation)):
         print("Oh no!!  You've been eaten by a hungry monster!")
         return False
 
     # Determine if any treasure is in the location
-    treasure = findPoint(treasure_locations, player_location)
+    treasure = findPoint(treasureLocations, playerLocation)
 
     if (treasure >= 0):
         print "You found the " + treasures[treasure]
@@ -125,7 +126,7 @@ def enterLocation(location):
             print "You have " + str(remainingTreasures) + " more treasure" + ("s" if remainingTreasures > 1 else "") + " to find!"
 
     # If the monster is nearby, let the player know
-    if (monster_location.isAdjacentTo(player_location)):
+    if (monsterLocation.isAdjacentTo(playerLocation)):
         print "You can hear a growling sound nearby!"
 
     return True
@@ -145,17 +146,17 @@ def processCommand(command):
 
     # Handle a possible movement command
     if (command == "l"):
-        if (player_location.x > 1):
-            newLocation = Point(player_location.x - 1, player_location.y)
+        if (playerLocation.x > 1):
+            newLocation = Point(playerLocation.x - 1, playerLocation.y)
     elif (command == "r"):
-        if (player_location.x < GRID_SIZE):
-            newLocation = Point(player_location.x + 1, player_location.y)
+        if (playerLocation.x < GRID_SIZE):
+            newLocation = Point(playerLocation.x + 1, playerLocation.y)
     elif (command == "u"):
-        if (player_location.y > 1):
-            newLocation = Point(player_location.x, player_location.y - 1)
+        if (playerLocation.y > 1):
+            newLocation = Point(playerLocation.x, playerLocation.y - 1)
     elif (command == "d"):
-        if (player_location.y < GRID_SIZE):
-            newLocation = Point(player_location.x, player_location.y + 1)
+        if (playerLocation.y < GRID_SIZE):
+            newLocation = Point(playerLocation.x, playerLocation.y + 1)
     else:
         print "I don't know what you mean"
         return True
@@ -168,7 +169,7 @@ def processCommand(command):
 
 # Implement the game loop, which repeats until the game is over.
 def game_loop():
-    gameActive = enterLocation(player_location)
+    gameActive = enterLocation(playerLocation)
 
     while gameActive == True:
         print "\nWhat do you want to do? "
